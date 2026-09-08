@@ -45,7 +45,7 @@ func physics_update(delta: float) -> void:
 	#player.jump_using_coyote_timer(state_machine)
 	
 	# --- Wall Slide ---	
-	change_to_wall_slide()
+	#change_to_wall_slide()
 	
 	# --- in Air ---
 	if (not player.is_on_floor()) and (not player.is_on_wall()):
