@@ -11,7 +11,10 @@ func enter() -> void:
 	#else:
 		#player.player_sprites.flip_h = false	
 	#leftStore = player.playerLastLeft
-	player.player_sprites.play("idle")
+	if player.hasGun:
+		player.player_sprites.play("idle")
+	elif !player.hasGun:
+		player.player_sprites.play("idle_no_gun")
 	#player.player_sprites.flip_h = leftStore
 
 func change_to_wall_slide():

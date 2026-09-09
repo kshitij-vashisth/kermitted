@@ -1,4 +1,5 @@
 extends CharacterBody2D
+var hasGun: bool = true
 var stored_sign_x_velocity: int = 0
 var toBounce: bool = false
 @export var firing_light_value: float = 20.0
@@ -69,6 +70,14 @@ func hurt()-> void:
 	#velocity.x += -look_dir*2500 
 	player_sprites.play("hurt")
 	#player_hurt_sound.play()
+
+func hurt_and_knockback(x_delta: float, game_manager: Node, playerHurtDamage: int) -> void:
+	var knock_dir = sign(x_delta)  # +1 if player is to the right of mushroom, -1 if left
+	if knock_dir == 0:
+		knock_dir = 1 if isLeft else -1  # pick a default based on facing
+	velocity.x = knock_dir * 2500
+	change_state("hurt", state_access)
+	game_manager.decrease_health(playerHurtDamage)
 
 #func check_look_dir() -> void:
 	#var dir_check: int
@@ -215,29 +224,35 @@ func bullet_and_shell_instance(direction: int)-> void:
 	get_parent().add_child(bullet_instance)
 
 func shoot_function(recoil_value: int) -> void:
-	player_muzzle_position()
-	
-	shoot_light.global_position = muzzle.global_position
-	shoot_light.energy = firing_light_value
+	if hasGun:
+		player_muzzle_position()
+		
+		shoot_light.global_position = muzzle.global_position
+		shoot_light.energy = firing_light_value
 
-	var tween = create_tween()
-	tween.tween_property(shoot_light, "energy", 0.0, 0.08)
-	
-	sfx_normal_bullet.play()
-	bullet_and_shell_instance(1) #1 specifies direction
-	#recoil on ground
-	shooting_knockback(recoil_value)
+		var tween = create_tween()
+		tween.tween_property(shoot_light, "energy", 0.0, 0.08)
+		
+		sfx_normal_bullet.play()
+		bullet_and_shell_instance(1) #1 specifies direction
+		#recoil on ground
+		shooting_knockback(recoil_value)
+	else:
+		pass
 	
 func on_wall_shoot_function() -> void:
-	player_muzzle_position_on_wall()
-	
-	shoot_light.global_position = muzzle.global_position
-	shoot_light.energy = firing_light_value
+	if hasGun:
+		player_muzzle_position_on_wall()
+		
+		shoot_light.global_position = muzzle.global_position
+		shoot_light.energy = firing_light_value
 
-	var tween = create_tween()
-	tween.tween_property(shoot_light, "energy", 0.0, 0.08)
-	# initialise bullet and shell
-	bullet_and_shell_instance(-1) #-1 specifies opposite direction of where player sprite looks
+		var tween = create_tween()
+		tween.tween_property(shoot_light, "energy", 0.0, 0.08)
+		# initialise bullet and shell
+		bullet_and_shell_instance(-1) #-1 specifies opposite direction of where player sprite looks
+	else:
+		pass
 
 func shooting_knockback(shoot_knockback: int)->void:
 	if look_dir > 0:

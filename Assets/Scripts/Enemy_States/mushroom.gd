@@ -14,7 +14,7 @@ extends CharacterBody2D
 @onready var game_manager: Node = %GameManager
 @export var health: int = 1
 @export var isInvincible: bool = false
-
+@export var playerHurtDamage: int = 1
 var dying: bool = false
 var direction: int = -1
 
@@ -45,8 +45,8 @@ func platform_edge()->void:
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "MainCharacter":
-		var y_delta = position.y - body.position.y
-		var x_delta = body.position.x - position.x
+		var y_delta: float = position.y - body.position.y
+		var x_delta: float = body.position.x - position.x
 		if y_delta > 30 and pointsEnabled and not isInvincible:
 			can_move = false
 			dying = true
@@ -62,10 +62,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			queue_free()
 		
 		if abs(x_delta) > 0 and not dying:
-			var knock_dir = sign(x_delta)  # +1 if player is to the right of mushroom, -1 if left
-			if knock_dir == 0:
-				knock_dir = 1 if body.isLeft else -1  # pick a default based on facing
-			body.velocity.x = knock_dir * 2500
-			body.change_state("hurt", body.state_access)
-			game_manager.decrease_health()
+			body.hurt_and_knockback(x_delta, game_manager, playerHurtDamage)
+			#game_manager.decrease_health()
 			#GameManager.num_hearts = game_manager.num_hearts

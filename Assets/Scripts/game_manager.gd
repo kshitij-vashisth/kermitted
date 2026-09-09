@@ -5,19 +5,19 @@ var num_mosquitoes: int = 0
 var num_hearts: int = 3
 var points: int = 0
 var lives: int = 3
-var cherries: int = 0
+#var cherries: int = 0
 #inventory===========================================
 var tutorial_completed: bool = false
 var first_load: bool = true
 var has_gun: bool = false
-var has_sword: bool = false
-var has_tome: bool = false
-var gun_ammo: int = 0
-var sword_strikes: int = 0
-var tome_spells: int = 0
-var current_weapon_index: int = 0
+#var has_sword: bool = false
+#var has_tome: bool = false
+#var gun_ammo: int = 0
+#var sword_strikes: int = 0
+#var tome_spells: int = 0
+#var current_weapon_index: int = 0
 
-var inventory: Array = [gun_ammo, sword_strikes, tome_spells]
+#var inventory: Array = [gun_ammo, sword_strikes, tome_spells]
 #======================================================
 
 @export var hearts: Array[Node]
@@ -53,14 +53,14 @@ func decrease_lives() -> void:
 		lives = 0
 		call_deferred("game_over")
 
-func decrease_health() -> void:
-	num_hearts -= 1
+func decrease_health(playerHurtDamage: int) -> void:
+	num_hearts -= playerHurtDamage
 	for h in 3:
 		if h < num_hearts:
 			hearts[h].show()
 		else:
 			hearts[h].hide()
-	if num_hearts == 0:
+	if num_hearts <= 0:
 		player.change_state("dead", player.state_access)
 		
 
@@ -87,15 +87,6 @@ func check_zero_add_zero() -> String:
 	return final_points  
 
 
-
-##SpawningMethods=======================================
-#func spawn_gun(pos) -> void:
-	#var GunScene = preload("res://assets/Scenes/weapons/pistol_powerup.tscn")
-	#var gun = GunScene.instantiate()
-	#gun.global_position = pos
-	#get_tree().current_scene.add_child(gun)
-	##get_tree().root.add_child(gun)
-##======================================================
 func reset_game_soft() -> void:
 	#has_gun = false
 	#has_sword = false
@@ -132,7 +123,7 @@ func reset_game_soft() -> void:
 	#save_data.points = points
 	#save_data.lives = lives
 	#save_data.hearts = num_hearts
-	#save_data.cherries = cherries
+	#save_data.mosquitoes = num_mosquitoes
 	#
 	#save_data.tutorial_completed = tutorial_completed
 	#save_data.first_load = first_load
