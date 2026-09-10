@@ -1,7 +1,7 @@
 extends Node
 @onready var pause_panel: Panel = %PausePanel
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var esc_pressed: bool = Input.is_action_just_pressed("pause")
 	if esc_pressed:
 		get_tree().paused = true

@@ -7,6 +7,8 @@ func enter()-> void:
 		player.player_sprites.play("crouch")
 	elif not player.hasGun:
 		player.player_sprites.play("crouch_no_gun")
+	player.velocity.x = 0
+
 
 func physics_update(delta: float) -> void:
 	player.apply_gravity(delta)

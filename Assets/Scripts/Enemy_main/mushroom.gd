@@ -10,7 +10,7 @@ extends CharacterBody2D
 @export var squash_sound: AudioStreamPlayer2D
 @export var can_move: bool = true
 @export var state_access: StateMachine 
-@export var points: int = 150
+@export var points: int = 10
 @onready var game_manager: Node = %GameManager
 @export var health: int = 1
 @export var isInvincible: bool = false
@@ -19,7 +19,7 @@ var dying: bool = false
 var direction: int = -1
 
 func change_state(desired_state_name: String, state_machine):
-		var current_state_name = str(state_access.current_state)
+		#var current_state_name = str(state_access.current_state)
 		state_machine.change_state(desired_state_name)
 
 func squash() -> void:

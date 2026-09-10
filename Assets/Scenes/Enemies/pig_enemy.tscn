@@ -1,9 +1,15 @@
 [gd_scene format=3 uid="uid://dml8gehbaflvn"]
 
-[ext_resource type="Script" uid="uid://cnscedt8u35mp" path="res://Assets/Scripts/Enemy/pig_enemy.gd" id="1_4rmf3"]
+[ext_resource type="Script" uid="uid://cnscedt8u35mp" path="res://Assets/Scripts/Enemy_main/pig_enemy.gd" id="1_4rmf3"]
 [ext_resource type="Texture2D" uid="uid://cpe22okqcw8vv" path="res://Assets/Art/Enemies/AngryPig/Idle (36x30).png" id="2_anmq1"]
 [ext_resource type="Texture2D" uid="uid://m3d7ntft81v" path="res://Assets/Art/Enemies/AngryPig/Run (36x30).png" id="2_oefff"]
+[ext_resource type="Texture2D" uid="uid://dmag2s681ab1k" path="res://Assets/Art/Enemies/death.png" id="3_icarx"]
 [ext_resource type="Texture2D" uid="uid://cceduhtjtj4qp" path="res://Assets/Art/Enemies/AngryPig/Walk (36x30).png" id="4_jaxc7"]
+[ext_resource type="Script" uid="uid://ne6xbq0iydbo" path="res://Assets/Scripts/Base State Code/state_machine.gd" id="6_i5ylh"]
+[ext_resource type="Script" uid="uid://y603j1boxpdx" path="res://Assets/Scripts/Enemy_States/Pig_States/pig_wander.gd" id="7_mppx8"]
+[ext_resource type="Script" uid="uid://ou2owvpkacoq" path="res://Assets/Scripts/Enemy_States/Pig_States/pig_chase.gd" id="8_15m83"]
+[ext_resource type="Script" uid="uid://cscytjgcxlm0b" path="res://Assets/Scripts/Enemy_States/Pig_States/pig_death.gd" id="9_mppx8"]
+[ext_resource type="AudioStream" uid="uid://by2dp5lmwtpsp" path="res://Assets/Sounds/SFX/EMP_1.mp3" id="10_15m83"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6xfk6"]
 atlas = ExtResource("2_oefff")
@@ -52,6 +58,30 @@ region = Rect2(360, 0, 36, 30)
 [sub_resource type="AtlasTexture" id="AtlasTexture_363x6"]
 atlas = ExtResource("2_oefff")
 region = Rect2(396, 0, 36, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r1ber"]
+atlas = ExtResource("3_icarx")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cdrj1"]
+atlas = ExtResource("3_icarx")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sfl6u"]
+atlas = ExtResource("3_icarx")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ciwuq"]
+atlas = ExtResource("3_icarx")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t5a7e"]
+atlas = ExtResource("3_icarx")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e46ui"]
+atlas = ExtResource("3_icarx")
+region = Rect2(160, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_23jpc"]
 atlas = ExtResource("2_anmq1")
@@ -198,6 +228,29 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_r1ber")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cdrj1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sfl6u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ciwuq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t5a7e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e46ui")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 24.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_23jpc")
 }, {
 "duration": 1.0,
@@ -283,31 +336,35 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6fbie"]
-size = Vector2(59, 20)
+size = Vector2(92, 81)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_23jpc"]
 size = Vector2(95, 80)
 
-[node name="PigEnemy" type="CharacterBody2D" unique_id=1924460330]
+[node name="PigEnemy" type="CharacterBody2D" unique_id=1924460330 node_paths=PackedStringArray("collider1", "collider2", "bullet_death_sound", "sprite", "ground_check", "state_access")]
 scale = Vector2(0.5, 0.5)
-collision_layer = 8
-collision_mask = 22
+collision_mask = 2
 script = ExtResource("1_4rmf3")
+collider1 = NodePath("FloorCollider")
+collider2 = NodePath("Area2D/CollisionShape2D")
+bullet_death_sound = NodePath("sfx_death")
+sprite = NodePath("Sprite2D")
+ground_check = NodePath("GroundChecker")
+state_access = NodePath("StateMachine")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=1339642421]
 texture_filter = 1
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_6xfk6")
 animation = &"chase"
+autoplay = "default"
 
 [node name="FloorCollider" type="CollisionShape2D" parent="." unique_id=1998978317]
-visible = false
-position = Vector2(3.5, 35)
+position = Vector2(2, 4.5)
 shape = SubResource("RectangleShape2D_6fbie")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1794788756]
-collision_layer = 8
-collision_mask = 19
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=345963718]
 position = Vector2(2.5, 5)
@@ -325,6 +382,32 @@ one_shot = true
 [node name="GetPlayer" type="RayCast2D" parent="." unique_id=1573065361]
 target_position = Vector2(-489, 0)
 collision_mask = 3
+
+[node name="StateMachine" type="Node" parent="." unique_id=1301648933 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("6_i5ylh")
+initial_state = NodePath("wander")
+metadata/_custom_type_script = "uid://ne6xbq0iydbo"
+
+[node name="wander" type="Node" parent="StateMachine" unique_id=1718213109 node_paths=PackedStringArray("pig")]
+script = ExtResource("7_mppx8")
+pig = NodePath("../..")
+metadata/_custom_type_script = "uid://71savu34cj01"
+
+[node name="chase" type="Node" parent="StateMachine" unique_id=702399991 node_paths=PackedStringArray("enemy")]
+script = ExtResource("8_15m83")
+enemy = NodePath("../..")
+metadata/_custom_type_script = "uid://71savu34cj01"
+
+[node name="death" type="Node" parent="StateMachine" unique_id=1523481159 node_paths=PackedStringArray("enemy", "sprite", "death_sound")]
+script = ExtResource("9_mppx8")
+enemy = NodePath("../..")
+sprite = NodePath("../../Sprite2D")
+death_sound = NodePath("../../sfx_death")
+metadata/_custom_type_script = "uid://71savu34cj01"
+
+[node name="sfx_death" type="AudioStreamPlayer" parent="." unique_id=2014375515]
+stream = ExtResource("10_15m83")
+volume_db = 7.565
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://be7oyv5mdqhq4" path="res://Assets/Art/projectiles/bullet1.png" id="1_omsjc"]
 [ext_resource type="Script" uid="uid://cl7c7tg5ms1tp" path="res://Assets/Scripts/Elements/bullet.gd" id="2_hdrs6"]
+[ext_resource type="AudioStream" uid="uid://by2dp5lmwtpsp" path="res://Assets/Sounds/SFX/EMP_1.mp3" id="3_uxfmu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hdrs6"]
 atlas = ExtResource("1_omsjc")
@@ -42,12 +43,13 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0cgwx"]
 size = Vector2(13, 6)
 
-[node name="Bullet" type="AnimatedSprite2D" unique_id=254983548]
+[node name="Bullet" type="AnimatedSprite2D" unique_id=254983548 node_paths=PackedStringArray("bullet_death_sound")]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_0cgwx")
 autoplay = "default"
 frame_progress = 0.86576414
 script = ExtResource("2_hdrs6")
+bullet_death_sound = NodePath("sfx_bullet_death")
 
 [node name="Timer" type="Timer" parent="." unique_id=970082134]
 wait_time = 0.4
@@ -55,10 +57,16 @@ one_shot = true
 autostart = true
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1929231686]
+collision_layer = 9
+collision_mask = 9
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1043918390]
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_0cgwx")
+
+[node name="sfx_bullet_death" type="AudioStreamPlayer" parent="." unique_id=1423223528]
+stream = ExtResource("3_uxfmu")
+volume_db = 7.576
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

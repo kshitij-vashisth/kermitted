@@ -295,10 +295,9 @@ func _physics_process(_delta: float) -> void:
 	var was_on_floor: bool = is_on_floor()
 	#coyote_checker(was_on_floor)
 
-func _process(delta):
+func _process(_delta):
 	var mouse_position := get_global_mouse_position()
 	var tongue_direction := global_position.direction_to(mouse_position)
-
 	aim_line.points = PackedVector2Array([
 		aim_line.to_local(global_position),
 		aim_line.to_local(global_position + tongue_direction * 1000.0)

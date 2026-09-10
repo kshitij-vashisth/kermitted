@@ -1,4 +1,5 @@
 extends State
+
 @export var enemy: CharacterBody2D
 @export var sprite: AnimatedSprite2D
 @export var death_sound: AudioStreamPlayer

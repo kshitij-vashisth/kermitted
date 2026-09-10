@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d1hki1ryp8g1j"]
 
-[ext_resource type="Script" uid="uid://cabe8ssidp5h3" path="res://Assets/Scripts/Enemy_States/mushroom.gd" id="1_ch3m3"]
+[ext_resource type="Script" uid="uid://cabe8ssidp5h3" path="res://Assets/Scripts/Enemy_main/mushroom.gd" id="1_ch3m3"]
 [ext_resource type="Script" uid="uid://ebcbk38sadlc" path="res://Assets/Scripts/Enemy_States/Mushroom_States/mushroom_idle.gd" id="1_fd0t6"]
 [ext_resource type="Texture2D" uid="uid://c81g3yw3srqb7" path="res://Assets/Art/Enemies/Mushroom/Idle (32x32).png" id="1_jtb71"]
 [ext_resource type="Texture2D" uid="uid://dmag2s681ab1k" path="res://Assets/Art/Enemies/death.png" id="2_y35un"]
@@ -302,7 +302,7 @@ state_access = NodePath("StateMachine")
 texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_fwbh4")
-animation = &"idle"
+animation = &"death"
 autoplay = "idle"
 
 [node name="Collider" type="CollisionShape2D" parent="." unique_id=1551831987]
@@ -324,10 +324,11 @@ script = ExtResource("5_g0cec")
 mushroom = NodePath("../..")
 metadata/_custom_type_script = "uid://71savu34cj01"
 
-[node name="Death" type="Node" parent="StateMachine" unique_id=2102465022 node_paths=PackedStringArray("enemy", "sprite")]
+[node name="Death" type="Node" parent="StateMachine" unique_id=2102465022 node_paths=PackedStringArray("enemy", "sprite", "death_sound")]
 script = ExtResource("8_lrsgp")
 enemy = NodePath("../..")
 sprite = NodePath("../../AnimatedSprite2D")
+death_sound = NodePath("../../bullet_death")
 metadata/_custom_type_script = "uid://71savu34cj01"
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1304854540]

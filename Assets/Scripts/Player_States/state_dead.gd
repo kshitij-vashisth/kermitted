@@ -12,8 +12,3 @@ func enter() -> void:
 	await get_tree().create_timer(1.25).timeout
 	player.hide()
 	GameManager.decrease_lives()
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

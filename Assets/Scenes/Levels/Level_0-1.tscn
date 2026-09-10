@@ -897,7 +897,7 @@ position = Vector2(-0.666687, -1)
 shape = SubResource("RectangleShape2D_0cgwx")
 
 [node name="MainCharacter" parent="." unique_id=1106944162 instance=ExtResource("29_skrtq")]
-position = Vector2(-1060, 455)
+position = Vector2(-1071, 426)
 
 [node name="Anima_Panels" type="Node" parent="." unique_id=1089394373]
 

@@ -12,7 +12,7 @@ extends CharacterBody2D
 @export var eaten_sound: AudioStreamPlayer2D
 
 func change_state(desired_state_name: String, state_machine):
-		var current_state_name = str(state_access.current_state)
+		#var current_state_name = str(state_access.current_state)
 		state_machine.change_state(desired_state_name)
 func move_enemy() -> void:
 	#move_sound.play()

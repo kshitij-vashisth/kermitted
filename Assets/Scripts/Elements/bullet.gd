@@ -3,7 +3,10 @@ var power: int = GameManager.bullet_damage
 var SPEED: int = 600
 var direction: float
 var smoke = preload("res://Assets/Elements/wall_smoke_bullet.tscn")
+@export var bullet_death_sound: AudioStreamPlayer
 
+func _ready() -> void:
+	add_to_group("bullets")
 
 func _physics_process(delta: float) -> void:
 	if direction < 0:
@@ -19,12 +22,14 @@ func _on_timer_timeout() -> void:
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
 		body.health -= power
+		print("bullet hit. health is:", body.health)
 		if body.health <= 0 and body.pointsEnabled:
 			#body.collider.disabled
 			body.pointsEnabled = false
-			body.sprite.play("death")
-			body.bullet_death_sound.play()
+			bullet_death_sound.play()
 			body.enemy_dead()
+		else:
+			print("bounced back")
 		queue_free()
 	
 	if body.is_in_group("tilemap"):
