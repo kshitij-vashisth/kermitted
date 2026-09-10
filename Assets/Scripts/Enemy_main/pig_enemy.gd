@@ -29,6 +29,14 @@ var direction: int = -1
 
 var waiting_at_edge: bool = false
 
+func stop_at_edge() -> void:
+	at_edge = not ground_check.is_colliding()
+
+func update_direction_visuals():
+	get_player.scale.x *= -1
+	sprite.scale.x *= -1
+	
+
 
 func change_state(desired_state_name: String, state_machine):
 		#var current_state_name = str(state_access.current_state)
@@ -53,7 +61,9 @@ func platform_edge()->void:
 	if not ground_check.is_colliding():
 		direction = -direction
 		ground_check.position.x *= -1
-		sprite.scale.x *= -1
+		update_direction_visuals()
+		
+		
 #Chase functions=================================================>
 func look_for_player() -> void:
 	if get_player.is_colliding():
@@ -61,12 +71,24 @@ func look_for_player() -> void:
 		if collider == player:
 			change_state("chase", state_access)
 
-func chase_player() -> void:
+func player_left() -> void:
+		var collider = get_player.get_collider()
+		if not collider == player:
+			await get_tree().create_timer(1.7).timeout
+			change_state("wander", state_access)
 
+func chase_player() -> void:
+	var last_direction = direction
+	if player:
+		direction = sign(player.global_position.x - global_position.x)
+		if last_direction != direction:
+			last_direction = direction
+			update_direction_visuals()
 	if not at_edge:
 		velocity.x = chase_speed_multiplier * SPEED * direction
+		
 	else:
-		velocity.x = 0
+		stop_chase()
 		await get_tree().create_timer(0.7).timeout
 		change_state("wander", state_access)
 
@@ -104,3 +126,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		
 		if abs(x_delta) > 0 and not dying:
 			body.hurt_and_knockback(x_delta, game_manager, playerHurtDamage)
+
+func _physics_process(delta: float) -> void:
+	stop_at_edge()

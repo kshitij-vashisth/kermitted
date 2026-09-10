@@ -8,5 +8,6 @@ func enter() -> void:
 func physics_update(delta: float) -> void:
 	enemy.add_gravity(delta)
 	enemy.chase_player()
-	
+	#enemy.platform_edge()
 	enemy.move_and_slide()
+	enemy.player_left()
