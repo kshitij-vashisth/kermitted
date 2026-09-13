@@ -10,7 +10,10 @@ func physics_update(delta: float) -> void:
 	#else:
 		#player.player_sprites.flip_h = false
 	player.apply_gravity(delta)
-	player.player_sprites.play("jump")
+	if not player.has_gun:
+		player.player_sprites.play("jump_no_gun")
+	elif player.has_gun:
+		player.player_sprites.play("jump")
 	#player.isLeft = player.direction_calculate(player.velocity.x)
 	#player.player_sprites.flip_h = player.isLeft
 	player.air_control(delta)

@@ -339,7 +339,7 @@ animations = [{
 size = Vector2(92, 81)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_23jpc"]
-size = Vector2(95, 80)
+size = Vector2(95, 83)
 
 [node name="PigEnemy" type="CharacterBody2D" unique_id=1924460330 node_paths=PackedStringArray("collider1", "collider2", "bullet_death_sound", "sprite", "ground_check", "state_access")]
 scale = Vector2(0.5, 0.5)
@@ -367,7 +367,7 @@ shape = SubResource("RectangleShape2D_6fbie")
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=345963718]
-position = Vector2(2.5, 5)
+position = Vector2(2.5, 3.5)
 shape = SubResource("RectangleShape2D_23jpc")
 
 [node name="GroundChecker" type="RayCast2D" parent="." unique_id=1291903361]

@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://b80uon1x451vp"]
+
+[ext_resource type="Texture2D" uid="uid://dhuas7076eqc8" path="res://Assets/Art/Power-ups/Stealth/chameleon_pickup.png" id="1_1am3c"]
+[ext_resource type="Script" uid="uid://pua2eyudixhj" path="res://Assets/Scripts/Collectible/powerup_chameleon.gd" id="1_tuda3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1am3c"]
+atlas = ExtResource("1_1am3c")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tuda3"]
+atlas = ExtResource("1_1am3c")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wna1f"]
+atlas = ExtResource("1_1am3c")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6j73n"]
+atlas = ExtResource("1_1am3c")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v2umj"]
+atlas = ExtResource("1_1am3c")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xludh"]
+atlas = ExtResource("1_1am3c")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pyrh8"]
+atlas = ExtResource("1_1am3c")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0cgwx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1am3c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tuda3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wna1f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6j73n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v2umj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xludh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pyrh8")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0cgwx"]
+size = Vector2(28, 29)
+
+[node name="Chameleon" type="Node2D" unique_id=130638078]
+script = ExtResource("1_tuda3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=700756825]
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_0cgwx")
+autoplay = "default"
+frame_progress = 0.84274465
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1671902008]
+collision_layer = 8
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1540513874]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_0cgwx")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

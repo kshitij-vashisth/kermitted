@@ -34,7 +34,10 @@ func physics_update(delta: float) -> void:
 	#player.direction_collision()
 	player.velocity.y = 0
 	if player.velocity.y < player.slide_speed:
-		player.player_sprites.play("wall_slide")
+		if not player.has_gun:
+			player.player_sprites.play("wall_slide_no_gun")
+		elif player.has_gun:
+			player.player_sprites.play("wall_slide")
 		player.velocity.y += player.fall_gravity * delta * 0.8
 	
 	## --- Horizontal air control ---

@@ -9,7 +9,7 @@ func enter() -> void:
 		pass
 
 	
-func _physics_process(_delta: float) -> void:
+func _physics_process(_gdelta: float) -> void:
 	
 	#print(velocity_checker.text)
 	pass

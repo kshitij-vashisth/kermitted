@@ -26,7 +26,11 @@ func enter() -> void:
 		
 	
 func physics_update(delta: float) -> void:
-	player.player_sprites.play("jump")
+	
+	if player.hasGun:
+		player.player_sprites.play("jump")
+	elif not player.hasGun:
+		player.player_sprites.play("jump_no_gun")
 	
 	player.flip_sprite()
 	player.apply_gravity(delta)

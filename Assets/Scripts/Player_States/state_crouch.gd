@@ -3,9 +3,9 @@ extends State
 @export var player: CharacterBody2D
 
 func enter()-> void:
-	if player.hasGun:
+	if player.has_gun:
 		player.player_sprites.play("crouch")
-	elif not player.hasGun:
+	elif not player.has_gun:
 		player.player_sprites.play("crouch_no_gun")
 	player.velocity.x = 0
 

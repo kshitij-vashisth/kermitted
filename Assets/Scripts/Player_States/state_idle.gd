@@ -11,9 +11,9 @@ func enter() -> void:
 	#else:
 		#player.player_sprites.flip_h = false	
 	#leftStore = player.playerLastLeft
-	if player.hasGun:
+	if player.has_gun:
 		player.player_sprites.play("idle")
-	elif !player.hasGun:
+	elif !player.has_gun:
 		player.player_sprites.play("idle_no_gun")
 	#player.player_sprites.flip_h = leftStore
 

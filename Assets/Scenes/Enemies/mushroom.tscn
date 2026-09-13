@@ -302,7 +302,7 @@ state_access = NodePath("StateMachine")
 texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_fwbh4")
-animation = &"death"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="Collider" type="CollisionShape2D" parent="." unique_id=1551831987]

@@ -5,18 +5,27 @@ var num_mosquitoes: int = 0
 var num_hearts: int = 3
 var points: int = 0
 var lives: int = 3
-#var cherries: int = 0
 #inventory===========================================
 var tutorial_completed: bool = false
 var first_load: bool = true
+
+# --- Powerup ownership ---
 var has_stealth: bool = false
-var has_gun: bool = false
 var has_power: bool = false
-var has_armour: bool = false
-#var gun_ammo: int = 0g
-#var sword_strikes: int = 0
-#var tome_spells: int = 0
-var current_weapon_index: int = 0
+var has_armor: bool = false
+
+# --- Powerup active/toggled state (true = currently draining) ---
+var stealth_active: bool = false
+var power_active: bool = false
+var armor_active: bool = false
+
+# --- Powerup time remaining, in seconds ---
+var stealth_time: float = 0.0
+var power_time: float = 0.0
+var armor_time: float = 0.0
+
+# --- Currently selected powerup slot: 0 = stealth, 1 = power, 2 = armor ---
+var current_powerup_index: int = 0
 
 #var inventory: Array = [gun_ammo, sword_strikes, tome_spells]
 #======================================================
@@ -43,7 +52,7 @@ func game_over()-> void:
 	get_tree().change_scene_to_file("res://Assets/Scenes/TransitionScreens/Game_Over.tscn")
 
 func mosquito_add_points() -> void:
-	points += 5
+	points += 200
 	num_mosquitoes += 1
 
 func decrease_lives() -> void:
@@ -80,7 +89,7 @@ var level_changer_list: Array = [
 ]
 #======================================================
 func check_zero_add_zero() -> String:
-	var num_zeros: int = 9-len(str(points))
+	var num_zeros: int = 7-len(str(points))
 	var final_points: String = ""
 	for i in range(num_zeros):
 		final_points += str(0)
@@ -89,18 +98,20 @@ func check_zero_add_zero() -> String:
 
 
 func reset_game_soft() -> void:
-	#has_gun = false
-	#has_sword = false
-	#has_tome = false
-	#gun_ammo = 0
-	#sword_strikes = 0
-	#tome_spells = 0 
-	#current_weapon_index = 0
+	has_stealth = false
+	has_power = false
+	has_armor = false
+	stealth_active = false
+	power_active = false
+	armor_active = false
+	stealth_time = 0.0
+	power_time = 0.0
+	armor_time = 0.0
+	current_powerup_index = 0
 	#cherries = 0
 	#points = 0
 	#num_hearts = 3
 	#lives = 3
-	pass
 #
 #
 #func reset_game() -> void:

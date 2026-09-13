@@ -1,5 +1,9 @@
 extends CharacterBody2D
-var hasGun: bool = true
+var has_gun: bool = true
+@onready var has_stealth: bool = GameManager.has_stealth
+@onready var has_power: bool = GameManager.has_power
+@onready var has_armour: bool = GameManager.has_armour
+@onready var current_weapon_index: int = GameManager.current_weapon_index
 var stored_sign_x_velocity: int = 0
 var toBounce: bool = false
 @export var firing_light_value: float = 20.0
@@ -40,6 +44,9 @@ var last_direction: float
 @export var sfx_normal_bullet: AudioStreamPlayer
 #==============================================================>
 
+@export var powerup_engaged: Timer
+@export var powerup_cooldown: Timer
+
 
 
 
@@ -55,6 +62,43 @@ var wall_pushoff_available: bool = true
 @export var air_accel: float = 10.0
 @export var push_off: float = 20.0
 #============================================================================#
+func maximum_stealth()-> void:
+	pass
+
+
+func powerup_switcher() -> void:
+	var previous_index := current_weapon_index
+
+	var left := Input.is_action_just_pressed("powerup_left")
+	var right := Input.is_action_just_pressed("powerup_right")
+
+	if left:
+		current_weapon_index = (current_weapon_index - 1 + 3) % 3
+	elif right:
+		current_weapon_index = (current_weapon_index + 1) % 3
+
+	# Loop until we land on a weapon we actually have
+	var loop_limit := 3
+	while loop_limit > 0:
+		if (current_weapon_index == 0 and GameManager.has_stealth) or \
+		   (current_weapon_index == 1 and GameManager.has_power) or \
+		   (current_weapon_index == 2 and GameManager.has_armour):
+			break  # Found valid weapon
+		current_weapon_index = (current_weapon_index + (1 if right else -1) + 3) % 3
+		loop_limit -= 1
+
+	if current_weapon_index != previous_index:
+		match current_weapon_index:
+			0:
+				print("Selected Chameleon")
+			1:
+				print("Selected Rhino")
+			2:
+				print("Selected Gorilla")
+	
+		GameManager.current_weapon_index = current_weapon_index
+
+
 
 
 func clear_tongue() -> void:
@@ -224,7 +268,7 @@ func bullet_and_shell_instance(direction: int)-> void:
 	get_parent().add_child(bullet_instance)
 
 func shoot_function(recoil_value: int) -> void:
-	if hasGun:
+	if has_gun:
 		player_muzzle_position()
 		
 		shoot_light.global_position = muzzle.global_position
@@ -241,7 +285,7 @@ func shoot_function(recoil_value: int) -> void:
 		pass
 	
 func on_wall_shoot_function() -> void:
-	if hasGun:
+	if has_gun:
 		player_muzzle_position_on_wall()
 		
 		shoot_light.global_position = muzzle.global_position
@@ -270,6 +314,7 @@ func _ready() -> void:
 	muzzle_position = muzzle.position
 
 func _physics_process(_delta: float) -> void:
+	powerup_switcher()
 	if Input.is_action_just_pressed("reload_scene") and OS.is_debug_build():
 		call_deferred("_special_reload")
 	if toBounce:

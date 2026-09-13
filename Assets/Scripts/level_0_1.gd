@@ -10,7 +10,7 @@ extends Node
 
 func _ready() -> void:
 	if GameManager.has_gun == false:
-		player.hasGun = false
+		player.has_gun = false
 	else:
 		gun.queue_free()
 
@@ -28,7 +28,7 @@ func panel_dialogue() -> void:
 func _on_pickup_gun_area_body_entered(body: Node2D) -> void:
 	if body.name == "MainCharacter":
 		body.change_state("warp_in", body.state_access)
-		body.hasGun = true
+		body.has_gun = true
 		GameManager.has_gun = true
 		gun.queue_free()
 		await body.player_sprites.animation_finished

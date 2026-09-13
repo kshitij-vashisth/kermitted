@@ -2,9 +2,9 @@ extends State
 
 @export var player: CharacterBody2D
 func jump():
-	if player.hasGun:
+	if player.has_gun:
 		player.player_sprites.play("jump")
-	elif not player.hasGun:
+	elif not player.has_gun:
 		player.player_sprites.play("jump_no_gun")
 	player.velocity.y = player.jump_velocity
 
