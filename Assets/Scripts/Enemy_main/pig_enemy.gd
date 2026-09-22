@@ -66,7 +66,7 @@ func platform_edge()->void:
 		
 #Chase functions=================================================>
 func look_for_player() -> void:
-	if get_player.is_colliding():
+	if get_player.is_colliding() and not player.stealth_on:
 		var collider = get_player.get_collider()
 		if collider == player:
 			change_state("chase", state_access)

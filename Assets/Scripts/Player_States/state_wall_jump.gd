@@ -27,9 +27,9 @@ func enter() -> void:
 	
 func physics_update(delta: float) -> void:
 	
-	if player.hasGun:
+	if player.has_gun:
 		player.player_sprites.play("jump")
-	elif not player.hasGun:
+	elif not player.has_gun:
 		player.player_sprites.play("jump_no_gun")
 	
 	player.flip_sprite()

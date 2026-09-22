@@ -34,13 +34,37 @@ func power_texture() -> void:
 		elif power is TextureRect:
 			power.texture = new_texture	
 
+#func armour_texture() -> void:
+	#var new_texture: Texture2D = preload("res://Assets/Art/game_elements/armour_inventory.png")
+	#for armour in armour_node:
+		#if armour is Sprite2D:
+			#armour.texture = new_texture
+		#elif armour is TextureRect:
+			#armour.texture = new_texture
+
+func set_inactive_texture(nodes: Array[Node]) -> void:
+	var empty_texture: Texture2D = preload("res://Assets/Art/game_elements/Inventory_box.png")
+	for node in nodes:
+		if node is Sprite2D:
+			node.texture = empty_texture
+		elif node is TextureRect:
+			node.texture = empty_texture
+
 func update_power_ups() -> void:
 	if GameManager.has_stealth:
 		stealth_texture()
+	else:
+		set_inactive_texture(stealth_node)
+
 	if GameManager.has_power:
 		power_texture()
-	#if GameManager.hasArmour:
+	else:
+		set_inactive_texture(power_node)
+
+	#if GameManager.has_armour:
 		#armour_texture()
+	#else:
+		#set_inactive_texture(armour_node)
 
 func stealth_inactive() -> void:
 	var new_texture: Texture2D = preload("res://Assets/Art/game_elements/Inventory_box.png")

@@ -900,8 +900,9 @@ collision_mask = 3
 position = Vector2(-0.666687, -1)
 shape = SubResource("RectangleShape2D_0cgwx")
 
-[node name="MainCharacter" parent="." unique_id=1106944162 instance=ExtResource("29_skrtq")]
+[node name="MainCharacter" parent="." unique_id=1106944162 node_paths=PackedStringArray("power_timer_label") instance=ExtResource("29_skrtq")]
 position = Vector2(-1071, 426)
+power_timer_label = NodePath("../Power_timer_label")
 
 [node name="Anima_Panels" type="Node" parent="." unique_id=1089394373]
 
@@ -961,6 +962,21 @@ theme_override_font_sizes/font_size = 30
 text = "GUN RECEIVED!"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Power_timer_label" type="Label" parent="." unique_id=228115799]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -46.0
+offset_right = 20.0
+offset_bottom = -23.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("17_vcnwt")
+theme_override_font_sizes/font_size = 30
 
 [connection signal="pressed" from="Debug_Layer/Double_Jump_Switcher" to="Debug_Layer/Current State Panel/State_Checker" method="_on_button_pressed"]
 [connection signal="body_entered" from="fall_area" to="fall_area" method="_on_body_entered"]

@@ -1,11 +1,16 @@
 extends CharacterBody2D
 var has_gun: bool = true
+
+@onready var stealth_on: bool = false
+
 @onready var has_stealth: bool = GameManager.has_stealth
 @onready var has_power: bool = GameManager.has_power
 @onready var has_armour: bool = GameManager.has_armour
 @onready var current_weapon_index: int = GameManager.current_weapon_index
 var stored_sign_x_velocity: int = 0
 var toBounce: bool = false
+
+@export var power_timer_label: Label
 @export var firing_light_value: float = 20.0
 var bullet = preload("res://Assets/Elements/bullet.tscn")
 var shell = preload("res://Assets/Elements/Shell.tscn")
@@ -42,6 +47,9 @@ var last_direction: float
 @export var player_hurt_sound: AudioStreamPlayer
 @export var sfx_defeat: AudioStreamPlayer
 @export var sfx_normal_bullet: AudioStreamPlayer
+@export var sfx_maximum_armour: AudioStreamPlayer
+@export var sfx_cloak_engaged: AudioStreamPlayer
+@export var sfx_maximum_strength: AudioStreamPlayer
 #==============================================================>
 
 @export var powerup_engaged: Timer
@@ -312,6 +320,8 @@ func _ready() -> void:
 	shoot_light.energy = 0.0
 	#coyote_timer.wait_time = coyote_time 
 	muzzle_position = muzzle.position
+	#powerup_engaged.timeout.connect(_on_powerup_engaged_timeout)
+	#powerup_cooldown.timeout.connect(_on_powerup_cooldown_timeout)
 
 func _physics_process(_delta: float) -> void:
 	powerup_switcher()
@@ -323,6 +333,10 @@ func _physics_process(_delta: float) -> void:
 		#shoot_function()
 	is_left_calculate()
 	velocity_sign_handler()
+	
+	if Input.is_action_just_pressed("use_power"):
+		activate_power()
+	
 	var lastLives: int = GameManager.lives
 	#orients face for wall jumps and wall slides===#
 	#face_orientation()
@@ -340,10 +354,77 @@ func _physics_process(_delta: float) -> void:
 	var was_on_floor: bool = is_on_floor()
 	#coyote_checker(was_on_floor)
 
+func activate_power() -> void:
+	if not powerup_engaged.is_stopped() or not powerup_cooldown.is_stopped():
+		return  # already active, or still cooling down
+
+	# check ownership before doing anything
+	var owns_current_power: bool = false
+	match current_weapon_index:
+		0:
+			owns_current_power = GameManager.has_stealth
+		1:
+			owns_current_power = GameManager.has_power
+		2:
+			owns_current_power = GameManager.has_armour
+
+	if not owns_current_power:
+		print("No power available to use")
+		return
+
+	match current_weapon_index:
+		0:
+			print("Chameleon power activated")
+			stealth_on = true
+			sfx_cloak_engaged.play()
+			# put in stealth powerup
+			GameManager.has_stealth = false
+			has_stealth = false
+		1:
+			print("Rhino power activated")
+			sfx_maximum_strength.play()
+			GameManager.has_power = false
+			has_power = false
+		2:
+			print("Gorilla power activated")
+			sfx_maximum_armour.play()
+			GameManager.has_armour = false
+			has_armour = false
+
+	powerup_engaged.start()
+
 func _process(_delta):
+	if stealth_on:
+		player_sprites.modulate.a = 0.3
+	else:
+		player_sprites.modulate.a = 1.0
+	
 	var mouse_position := get_global_mouse_position()
 	var tongue_direction := global_position.direction_to(mouse_position)
 	aim_line.points = PackedVector2Array([
 		aim_line.to_local(global_position),
 		aim_line.to_local(global_position + tongue_direction * 1000.0)
 	])
+	
+	update_power_timer_display()
+	
+func update_power_timer_display() -> void:
+	if not powerup_engaged.is_stopped():
+		power_timer_label.text = "Power: %.0f%%" % ((powerup_engaged.time_left / powerup_engaged.wait_time) * 100.0)
+		power_timer_label.visible = true
+	elif not powerup_cooldown.is_stopped():
+		power_timer_label.text = "Cooldown: %.1fs" % powerup_cooldown.time_left
+		power_timer_label.visible = true
+	else:
+		power_timer_label.visible = false
+
+
+func _on_powerup_engaged_timeout() -> void:
+	# power just ran out — start cooldown
+	stealth_on = false
+	powerup_cooldown.start()
+	print("Power expired, cooldown started")
+
+
+func _on_powerup_cooldown_timeout() -> void:
+	print("Power ready again")

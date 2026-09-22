@@ -38,6 +38,10 @@
 [ext_resource type="AudioStream" uid="uid://dbfl8wmnh7wv3" path="res://Assets/Sounds/SFX/defeated.mp3" id="28_cpqnk"]
 [ext_resource type="AudioStream" uid="uid://ci33yg8f4segf" path="res://Assets/Sounds/SFX/bullet_sounds/normal_bullet.mp3" id="29_sw1ma"]
 [ext_resource type="Script" uid="uid://71savu34cj01" path="res://Assets/Scripts/Base State Code/state.gd" id="31_fprd2"]
+[ext_resource type="Script" uid="uid://o0wfuvrouc5d" path="res://Assets/Scripts/Player_States/state_stealth.gd" id="32_iyaio"]
+[ext_resource type="AudioStream" uid="uid://bytwg7jqojvx5" path="res://Assets/Sounds/SFX/crysis-cloak-crysis.mp3" id="40_mx1hg"]
+[ext_resource type="AudioStream" uid="uid://er3vt5hn164o" path="res://Assets/Sounds/SFX/maximum-armour-nanosuit-v2.mp3" id="41_p40i5"]
+[ext_resource type="AudioStream" uid="uid://dfowntxm8dsmr" path="res://Assets/Sounds/SFX/crysis-maximum-strength-crysis.mp3" id="42_3uc7e"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lbw2k"]
 atlas = ExtResource("2_hgjrd")
@@ -782,7 +786,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
-[node name="Player" type="CharacterBody2D" unique_id=2026125797 node_paths=PackedStringArray("player_sprites", "shoot_light", "jump_sound", "player_hurt_sound", "sfx_defeat", "sfx_normal_bullet", "powerup_engaged", "powerup_cooldown", "state_access")]
+[node name="Player" type="CharacterBody2D" unique_id=2026125797 node_paths=PackedStringArray("player_sprites", "shoot_light", "jump_sound", "player_hurt_sound", "sfx_defeat", "sfx_normal_bullet", "sfx_maximum_armour", "sfx_cloak_engaged", "sfx_maximum_strength", "powerup_engaged", "powerup_cooldown", "state_access")]
 texture_filter = 1
 collision_layer = 2
 safe_margin = 0.6
@@ -794,6 +798,9 @@ jump_sound = NodePath("SFX/jump_sound")
 player_hurt_sound = NodePath("SFX/player_hurt_sound")
 sfx_defeat = NodePath("SFX/defeat")
 sfx_normal_bullet = NodePath("SFX/normal_bullet_shoot")
+sfx_maximum_armour = NodePath("SFX/maximum_armour")
+sfx_cloak_engaged = NodePath("SFX/cloak_engaged")
+sfx_maximum_strength = NodePath("SFX/maximum_strength")
 powerup_engaged = NodePath("Timer_Nodes/powerup_engaged")
 powerup_cooldown = NodePath("Timer_Nodes/powerup_cooldown")
 coyote_time = 100.0
@@ -808,6 +815,7 @@ state_access = NodePath("StateMachine")
 autostart = true
 
 [node name="powerup_engaged" type="Timer" parent="Timer_Nodes" unique_id=881027785]
+wait_time = 5.0
 one_shot = true
 
 [node name="powerup_cooldown" type="Timer" parent="Timer_Nodes" unique_id=2143872755]
@@ -916,8 +924,9 @@ script = ExtResource("25_fhjhk")
 player = NodePath("../..")
 metadata/_custom_type_script = "uid://71savu34cj01"
 
-[node name="maximum_stealth" type="Node" parent="StateMachine" unique_id=1536914140]
-script = ExtResource("31_fprd2")
+[node name="maximum_stealth" type="Node" parent="StateMachine" unique_id=1536914140 node_paths=PackedStringArray("player")]
+script = ExtResource("32_iyaio")
+player = NodePath("../..")
 metadata/_custom_type_script = "uid://71savu34cj01"
 
 [node name="maximum_power" type="Node" parent="StateMachine" unique_id=555038884]
@@ -975,6 +984,18 @@ volume_db = 12.5
 stream = ExtResource("29_sw1ma")
 volume_db = 7.232
 
+[node name="cloak_engaged" type="AudioStreamPlayer" parent="SFX" unique_id=604138530]
+stream = ExtResource("40_mx1hg")
+volume_db = 12.395
+
+[node name="maximum_armour" type="AudioStreamPlayer" parent="SFX" unique_id=1741508631]
+stream = ExtResource("41_p40i5")
+pitch_scale = 0.85
+
+[node name="maximum_strength" type="AudioStreamPlayer" parent="SFX" unique_id=2052689953]
+stream = ExtResource("42_3uc7e")
+volume_db = 11.186
+
 [node name="Muzzle" type="Marker2D" parent="." unique_id=644844870]
 unique_name_in_owner = true
 position = Vector2(36, 10)
@@ -982,3 +1003,6 @@ position = Vector2(36, 10)
 [node name="ShootLight" type="PointLight2D" parent="." unique_id=877536140]
 position = Vector2(36, 10)
 texture = SubResource("GradientTexture2D_l1iog")
+
+[connection signal="timeout" from="Timer_Nodes/powerup_engaged" to="." method="_on_powerup_engaged_timeout"]
+[connection signal="timeout" from="Timer_Nodes/powerup_cooldown" to="." method="_on_powerup_cooldown_timeout"]
