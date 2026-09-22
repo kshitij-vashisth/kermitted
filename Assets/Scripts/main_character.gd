@@ -1,7 +1,10 @@
 extends CharacterBody2D
 var has_gun: bool = true
-
+@export var rhino_scale: Vector2 = Vector2(2.0, 2.0)
+@export var normal_scale: Vector2 = Vector2(1.0, 1.0)
+@export var rhino_velocity: int = 4500
 @onready var stealth_on: bool = false
+@onready var strength_on: bool = false
 
 @onready var has_stealth: bool = GameManager.has_stealth
 @onready var has_power: bool = GameManager.has_power
@@ -383,16 +386,20 @@ func activate_power() -> void:
 		1:
 			print("Rhino power activated")
 			sfx_maximum_strength.play()
+			strength_on = true
 			GameManager.has_power = false
 			has_power = false
+			var scale_tween_duration = 1.0
+			var tween = create_tween()
+			tween.tween_property(self, "scale", rhino_scale, scale_tween_duration)
 		2:
 			print("Gorilla power activated")
 			sfx_maximum_armour.play()
 			GameManager.has_armour = false
 			has_armour = false
-
+	
 	powerup_engaged.start()
-
+		
 func _process(_delta):
 	if stealth_on:
 		player_sprites.modulate.a = 0.3
@@ -422,9 +429,15 @@ func update_power_timer_display() -> void:
 func _on_powerup_engaged_timeout() -> void:
 	# power just ran out — start cooldown
 	stealth_on = false
+	var scale_tween_duration = 2.0
+	if strength_on:
+		strength_on = false
+		var tween = create_tween()
+		tween.tween_property(self, "scale", normal_scale, scale_tween_duration)
+	
 	powerup_cooldown.start()
 	print("Power expired, cooldown started")
 
 
 func _on_powerup_cooldown_timeout() -> void:
-	print("Power ready again")
+	print("Power ready again")             

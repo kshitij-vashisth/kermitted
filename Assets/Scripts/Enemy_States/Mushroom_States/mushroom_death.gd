@@ -4,9 +4,13 @@ extends State
 @export var death_sound: AudioStreamPlayer
 
 func enter() -> void:
-	death_sound.play()
+	if enemy.death_sound_choice == 0:
+		death_sound.play()
+	elif enemy.death_sound_choice == 1:
+		enemy.squash_sound.play()
 	sprite.play("death")
 	GameManager.points += enemy.points
+	enemy.pointsEnabled = false
 	await sprite.animation_finished
 	enemy.queue_free()
 

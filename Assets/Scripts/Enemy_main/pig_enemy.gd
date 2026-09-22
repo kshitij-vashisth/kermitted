@@ -124,8 +124,15 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		var y_delta: float = position.y - body.position.y
 		var x_delta: float = body.position.x - position.x
 		
+		print("x_delta: ", x_delta, " dying: ", dying)
 		if abs(x_delta) > 0 and not dying:
-			body.hurt_and_knockback(x_delta, game_manager, playerHurtDamage)
+			print("strength_on: ", body.strength_on, " body.velocity.x: ", body.velocity.x)
+			if not body.strength_on:
+				body.hurt_and_knockback(x_delta, game_manager, playerHurtDamage)
+			elif body.strength_on:
+				print("rhino working")
+				velocity.x = body.look_dir*5000
+				change_state("death",state_access)
 
 func _physics_process(delta: float) -> void:
 	stop_at_edge()
