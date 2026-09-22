@@ -49,6 +49,12 @@ Want to try it out? The previous version of the game is available as a **demo on
 This project has gone back to early stages, with many updates and features planned for the near future. Stay tuned for more updates, and check out the video showcasing the game’s mechanics and current progress!
 ### State Machine Updates Video
 
+## Update 8 (22nd September, 2026)
+
+<kbd>Added powerups!</kbd>
+
+https://github.com/user-attachments/assets/672660da-af32-4393-8d20-8a21f15c8874
+
 ## Update 7 (4th September, 2026)
 
 <kbd>New main menu, better music, and added a better gun with effects</kbd>
