@@ -1,4 +1,6 @@
 extends CharacterBody2D
+
+@export var cam: Camera2D
 var has_gun: bool = true
 @export var rhino_scale: Vector2 = Vector2(2.0, 2.0)
 @export var normal_scale: Vector2 = Vector2(1.0, 1.0)
@@ -327,6 +329,11 @@ func _ready() -> void:
 	#powerup_cooldown.timeout.connect(_on_powerup_cooldown_timeout)
 
 func _physics_process(_delta: float) -> void:
+	var screen_half_width = get_viewport_rect().size.x / 2.0
+	var left_wall = cam.max_x - screen_half_width
+	position.x = max(position.x, left_wall)
+	
+	
 	powerup_switcher()
 	if Input.is_action_just_pressed("reload_scene") and OS.is_debug_build():
 		call_deferred("_special_reload")
