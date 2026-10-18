@@ -64,6 +64,7 @@ animations = [{
 size = Vector2(28, 29)
 
 [node name="Chameleon" type="Node2D" unique_id=130638078]
+scale = Vector2(1.5, 1.5)
 script = ExtResource("1_tuda3")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=700756825]
